@@ -1,6 +1,33 @@
 # Hypixel Mirror API
 
-这是一个用于缓存 Hypixel API 数据的代理服务，帮助避免直接请求时的速率限制问题。
+<p align="center">
+  <a href="https://weige0831.github.io/HypixelAPImirror/">
+    <img src="https://img.shields.io/badge/文档-在线查看-blue?style=for-the-badge" alt="文档">
+  </a>
+  <a href="https://api.everlastingness.net/Hypixelmirror/public/docs.html">
+    <img src="https://img.shields.io/badge/演示站点-访问-green?style=for-the-badge" alt="演示站点">
+  </a>
+  <a href="https://github.com/weige0831/HypixelAPImirror/blob/main/LICENSE">
+    <img src="https://img.shields.io/badge/许可证-MIT-orange?style=for-the-badge" alt="License">
+  </a>
+</p>
+
+<p align="center">
+  <strong>智能的 Hypixel API 缓存代理服务</strong>
+</p>
+
+<p align="center">
+  这是一个用于缓存 Hypixel API 数据的代理服务，帮助避免直接请求时的速率限制问题。
+</p>
+
+---
+
+## 📚 快速链接
+
+- 📖 **[完整文档](https://weige0831.github.io/HypixelAPImirror/)** - GitHub Pages 托管的完整文档
+- 🌐 **[演示站点](https://api.everlastingness.net/Hypixelmirror/public/docs.html)** - 在线演示和 API 测试
+- 💻 **[源代码](https://github.com/weige0831/HypixelAPImirror)** - GitHub 仓库
+- 🐛 **[问题反馈](https://github.com/weige0831/HypixelAPImirror/issues)** - 提交 Bug 或建议
 
 ## ✨ 特性
 

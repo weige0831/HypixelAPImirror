@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypixel Mirror API - 完整文档</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --code-bg: #2c3e50;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            scroll-behavior: smooth;
+        }
+        
+        .navbar {
+            background-color: var(--secondary-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            color: #fff !important;
+            font-weight: bold;
+            font-size: 1.4rem;
+        }
+        
+        .nav-link {
+            color: rgba(255,255,255,0.8) !important;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: #fff !important;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #2980b9 100%);
+            color: white;
+            padding: 5rem 0;
+            margin-bottom: 3rem;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .hero .lead {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+        
+        .feature-box {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .sidebar {
+            position: sticky;
+            top: 20px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+        }
+        
+        .sidebar .nav-link {
+            color: #333 !important;
+            padding: 0.5rem 1rem;
+            border-left: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            color: var(--primary-color) !important;
+            border-left-color: var(--primary-color);
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+        
+        .endpoint {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .endpoint h3 {
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+        
+        .method {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-right: 10px;
+        }
+        
+        .method.get {
+            background-color: #61affe;
+            color: white;
+        }
+        
+        .method.post {
+            background-color: #49cc90;
+            color: white;
+        }
+        
+        .method.delete {
+            background-color: #f93e3e;
+            color: white;
+        }
+        
+        .badge-auth {
+            background-color: var(--warning-color);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+        
+        pre {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid #dee2e6;
+        }
+        
+        code {
+            color: #e83e8c;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-block {
+            background-color: var(--code-bg);
+            color: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        
+        .code-block code {
+            color: #ecf0f1;
+        }
+        
+        .response-example {
+            background-color: var(--code-bg);
+            color: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            overflow-x: auto;
+        }
+        
+        .param-table {
+            width: 100%;
+            margin: 1rem 0;
+        }
+        
+        .param-table th {
+            background-color: #f8f9fa;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        
+        .param-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .alert-custom {
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .alert-info-custom {
+            background-color: #d1ecf1;
+            border-left: 4px solid #0c5460;
+        }
+        
+        .alert-warning-custom {
+            background-color: #fff3cd;
+            border-left: 4px solid #856404;
+        }
+        
+        section {
+            scroll-margin-top: 80px;
+        }
+        
+        footer {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 3rem 0;
+            margin-top: 5rem;
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+        
+        .table-custom {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .sidebar {
+                position: relative;
+                top: 0;
+                max-height: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-server"></i> Hypixel Mirror API</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#overview">概述</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#setup">搭建</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#api">API</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#admin">管理</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/stats.php" target="_blank">统计</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <div class="hero">
+        <div class="container text-center">
+            <h1><i class="fas fa-rocket"></i> Hypixel Mirror API</h1>
+            <p class="lead">快速、可靠、智能的 Hypixel 数据镜像服务</p>
+            <p class="mt-4">
+                <a href="#setup" class="btn btn-light btn-lg me-2"><i class="fas fa-download"></i> 快速开始</a>
+                <a href="#api" class="btn btn-outline-light btn-lg"><i class="fas fa-book"></i> 查看文档</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="container mb-5">
+        <div class="row">
+            <!-- 侧边栏目录 -->
+            <div class="col-lg-3 d-none d-lg-block">
+                <div class="sidebar">
+                    <nav class="nav flex-column">
+                        <a class="nav-link active" href="#overview">📋 概述</a>
+                        <a class="nav-link" href="#features">✨ 特性</a>
+                        <a class="nav-link" href="#requirements">📦 系统要求</a>
+                        <a class="nav-link" href="#setup">🚀 搭建教程</a>
+                        <a class="nav-link" href="#api">📖 API 文档</a>
+                        <a class="nav-link" href="#api-player">　→ 玩家数据</a>
+                        <a class="nav-link" href="#api-stats">　→ 统计信息</a>
+                        <a class="nav-link" href="#admin">🛠️ 管理功能</a>
+                        <a class="nav-link" href="#admin-setup">　→ 初始化</a>
+                        <a class="nav-link" href="#admin-keys">　→ 密钥管理</a>
+                        <a class="nav-link" href="#admin-cache">　→ 缓存管理</a>
+                        <a class="nav-link" href="#admin-maintenance">　→ 维护工具</a>
+                        <a class="nav-link" href="#cache-policy">💾 缓存策略</a>
+                        <a class="nav-link" href="#examples">💡 使用示例</a>
+                        <a class="nav-link" href="#troubleshooting">🔧 故障排除</a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- 主内容区域 -->
+            <div class="col-lg-9">
+                <!-- 概述 -->
+                <section id="overview">
+                    <h2 class="mb-4"><i class="fas fa-info-circle"></i> 项目概述</h2>
+                    <div class="endpoint">
+                        <p class="lead">Hypixel Mirror API 是一个智能的 Hypixel API 缓存代理服务，旨在帮助开发者避免直接请求 Hypixel API 时的速率限制问题。</p>
+                        <p>通过本服务，您可以：</p>
+                        <ul>
+                            <li>🚀 高速访问 Hypixel 玩家数据，无需担心速率限制</li>
+                            <li>💾 自动缓存数据 3 小时，减少对官方 API 的请求</li>
+                            <li>🔄 过期数据自动刷新，完全透明</li>
+                            <li>📊 完整的统计和监控功能</li>
+                            <li>🔑 多密钥管理，自动轮换和失效处理</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- 特性 -->
+                <section id="features" class="mt-5">
+                    <h2 class="mb-4"><i class="fas fa-star"></i> 核心特性</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="feature-box">
+                                <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                                <h4>智能缓存</h4>
+                                <p>数据缓存 3 小时，访问过期缓存时自动从官方 API 刷新，用户完全无感知。</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-box">
+                                <div class="feature-icon"><i class="fas fa-key"></i></div>
+                                <h4>多密钥管理</h4>
+                                <p>支持多个 Hypixel API 密钥，自动轮换使用，失效密钥自动删除。</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-box">
+                                <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                                <h4>完整统计</h4>
+                                <p>详细的请求日志、缓存命中率、密钥使用情况等统计数据。</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-box">
+                                <div class="feature-icon"><i class="fas fa-tools"></i></div>
+                                <h4>管理工具</h4>
+                                <p>Web 界面管理缓存和密钥，支持手动清理和维护操作。</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 系统要求 -->
+                <section id="requirements" class="mt-5">
+                    <h2 class="mb-4"><i class="fas fa-server"></i> 系统要求</h2>
+                    <div class="endpoint">
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>组件</th>
+                                    <th>版本要求</th>
+                                    <th>说明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>PHP</strong></td>
+                                    <td>7.4+</td>
+                                    <td>推荐使用 PHP 8.0+</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>MySQL</strong></td>
+                                    <td>5.7+</td>
+                                    <td>或 MariaDB 10.2+</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Web 服务器</strong></td>
+                                    <td>Nginx 1.25+ 或 Apache 2.4+</td>
+                                    <td>推荐使用 Nginx</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>PHP 扩展</strong></td>
+                                    <td>PDO, PDO_MySQL, cURL, JSON</td>
+                                    <td>必需扩展</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 搭建教程 -->
+                <section id="setup" class="mt-5">
+                    <h2 class="mb-4"><i class="fas fa-rocket"></i> 搭建教程</h2>
+                    
+                    <div class="endpoint">
+                        <h3><span class="step-number">1</span> 下载项目</h3>
+                        <div class="code-block">
+                            <code>git clone https://github.com/weige0831/HypixelAPImirror.git<br>
+cd HypixelAPImirror</code>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <h3><span class="step-number">2</span> 配置数据库</h3>
+                        <p>登录 MySQL 并创建数据库（如果使用现有数据库可跳过）：</p>
+                        <div class="code-block">
+                            <code># 登录 MySQL<br>
+mysql -u root -p<br><br>
+# 创建数据库<br>
+CREATE DATABASE IF NOT EXISTS api CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;<br><br>
+# 退出 MySQL<br>
+exit;</code>
+                        </div>
+                        <p class="mt-3">导入数据库结构：</p>
+                        <div class="code-block">
+                            <code>mysql -u root -p api &lt; database.sql</code>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <h3><span class="step-number">3</span> 配置文件</h3>
+                        <p>复制配置模板并编辑：</p>
+                        <div class="code-block">
+                            <code>cp config.example.php config.php<br>
+nano config.php</code>
+                        </div>
+                        <p class="mt-3">需要修改的配置项：</p>
+                        <ul>
+                            <li><code>database.host</code> - 数据库主机地址</li>
+                            <li><code>database.dbname</code> - 数据库名称（默认：api）</li>
+                            <li><code>database.username</code> - 数据库用户名</li>
+                            <li><code>database.password</code> - 数据库密码</li>
+                            <li><code>admin.username</code> - 管理员用户名</li>
+                            <li><code>admin.password</code> - 管理员密码（请使用强密码）</li>
+                        </ul>
+                    </div>
+
+                    <div class="endpoint">
+                        <h3><span class="step-number">4</span> 配置 Web 服务器</h3>
+                        <p><strong>Nginx 配置示例：</strong></p>
+                        <div class="code-block">
+                            <code>server {<br>
+    listen 80;<br>
+    server_name api.example.com;<br>
+    root /path/to/hypixelmirro/public;<br>
+    index index.php;<br><br>
+    location / {<br>
+        try_files $uri $uri/ /index.php?$query_string;<br>
+    }<br><br>
+    location ~ \.php$ {<br>
+        fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;<br>
+        fastcgi_index index.php;<br>
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;<br>
+        include fastcgi_params;<br>
+    }<br>
+}</code>
+                        </div>
+                        <p class="mt-3">重启 Nginx：</p>
+                        <div class="code-block">
+                            <code>systemctl restart nginx</code>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <h3><span class="step-number">5</span> 运行初始化</h3>
+                        <p>访问初始化页面（需要管理员认证）：</p>
+                        <div class="code-block">
+                            <code>http://api.example.com/setup.php</code>
+                        </div>
+                        <p class="mt-3">或使用命令行：</p>
+                        <div class="code-block">
+                            <code>curl -u admin:password "http://api.example.com/setup.php"</code>
+                        </div>
+                        <div class="alert-custom alert-info-custom mt-3">
+                            <strong><i class="fas fa-info-circle"></i> 提示：</strong> 初始化脚本会自动检查系统要求、创建数据库表、验证配置等。
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <h3><span class="step-number">6</span> 添加 API 密钥</h3>
+                        <p>首先，在 <a href="https://developer.hypixel.net/" target="_blank">Hypixel 开发者面板</a> 获取您的 API 密钥。</p>
+                        
+                        <p class="mt-3"><strong>然后，使用以下任一方式添加密钥：</strong></p>
+                        
+                        <h5 class="mt-3">方式一：使用 GET 请求（推荐）</h5>
+                        <div class="code-block">
+                            <code>curl -u admin:password "http://api.example.com/hypixel-keys.php?add_key=YOUR_HYPIXEL_API_KEY"</code>
+                        </div>
+                        
+                        <h5 class="mt-4">方式二：使用 POST 请求</h5>
+                        <div class="code-block">
+                            <code>curl -u admin:password -X POST \<br>
+  -H "Content-Type: application/json" \<br>
+  -d '{"hypixel_key":"YOUR_HYPIXEL_API_KEY"}' \<br>
+  "http://api.example.com/hypixel-keys.php"</code>
+                        </div>
+
+                        <h5 class="mt-4">验证密钥已添加</h5>
+                        <div class="code-block">
+                            <code># 查看所有密钥<br>
+curl -u admin:password "http://api.example.com/hypixel-keys.php"</code>
+                        </div>
+
+                        <div class="alert-custom alert-info-custom mt-3">
+                            <strong><i class="fas fa-info-circle"></i> 提示：</strong>
+                            <ul class="mb-0">
+                                <li>系统会自动验证密钥有效性，无效的密钥无法添加</li>
+                                <li>可以添加多个密钥，系统会自动轮换使用</li>
+                                <li>建议添加 2-3 个密钥以提高服务稳定性</li>
+                            </ul>
+                        </div>
+
+                        <div class="alert-custom alert-warning-custom mt-3">
+                            <strong><i class="fas fa-exclamation-triangle"></i> 重要：</strong> 至少需要添加一个有效的 Hypixel API 密钥才能使用服务。
+                        </div>
+                    </div>
+                </section>
+
+                <!-- API 文档 -->
+                <section id="api" class="mt-5">
+                    <h2 class="mb-4"><i class="fas fa-book"></i> API 文档</h2>
+
+                    <!-- 获取玩家数据 -->
+                    <div id="api-player" class="endpoint">
+                        <h3>
+                            <span class="method get">GET</span>
+                            获取玩家数据
+                        </h3>
+                        <p>获取指定玩家的所有 Hypixel 数据。支持通过 UUID 或玩家名称查询。</p>
+                        
+                        <h4 class="mt-4">请求 URL</h4>
+                        <div class="code-block">
+                            <code>GET /index.php?uuid={player_uuid}<br>
+GET /index.php?name={player_name}</code>
+                        </div>
+
+                        <h4 class="mt-4">请求参数</h4>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>参数</th>
+                                    <th>类型</th>
+                                    <th>必需</th>
+                                    <th>说明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>uuid</code></td>
+                                    <td>string</td>
+                                    <td>二选一</td>
+                                    <td>玩家的 UUID（32位，无连字符）</td>
+                                </tr>
+                                <tr>
+                                    <td><code>name</code></td>
+                                    <td>string</td>
+                                    <td>二选一</td>
+                                    <td>玩家的游戏名称</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4 class="mt-4">响应示例</h4>
+                        <pre class="response-example">{
+  "success": true,
+  "data": {
+    "player": {
+      "uuid": "f7c77d999f154a66a87dc4a51ef30d19",
+      "displayname": "jeb_",
+      "firstLogin": 1413309026000,
+      "lastLogin": 1731662015000,
+      "playername": "jeb_",
+      "networkExp": 1234567,
+      "stats": {
+        "Bedwars": {
+          "wins_bedwars": 1250,
+          "kills_bedwars": 8500,
+          ...
+        },
+        "SkyWars": {
+          ...
+        }
+      },
+      ...
+    },
+    "fetch_time": "2025-11-25 10:30:00"
+  }
+}</pre>
+
+                        <h4 class="mt-4">错误响应</h4>
+                        <pre class="response-example">{
+  "success": false,
+  "error": "Either player UUID or name is required"
+}</pre>
+
+                        <h4 class="mt-4">使用示例</h4>
+                        <div class="code-block">
+                            <code># 通过 UUID 查询<br>
+curl "https://api.example.com/index.php?uuid=f7c77d999f154a66a87dc4a51ef30d19"<br><br>
+# 通过玩家名查询<br>
+curl "https://api.example.com/index.php?name=Notch"</code>
+                        </div>
+                    </div>
+
+                    <!-- 获取统计信息 -->
+                    <div id="api-stats" class="endpoint">
+                        <h3>
+                            <span class="method get">GET</span>
+                            获取统计信息
+                        </h3>
+                        <p>获取 API 服务的运行统计信息，包括请求数、缓存命中率、密钥使用情况等。</p>
+                        
+                        <h4 class="mt-4">请求 URL</h4>
+                        <div class="code-block">
+                            <code>GET /stats.php</code>
+                        </div>
+
+                        <h4 class="mt-4">响应示例</h4>
+                        <pre class="response-example">{
+  "success": true,
+  "data": {
+    "timestamp": "2025-11-25 10:30:00",
+    "date": "2025-11-25",
+    "api_keys": {
+      "total": 3,
+      "valid": 3
+    },
+    "today_stats": {
+      "api_requests": 125,
+      "cache_hits": 450,
+      "successful_requests": 570,
+      "failed_requests": 5,
+      "unique_players": 89,
+      "total_requests": 575
+    },
+    "cache_stats": {
+      "total_entries": 500,
+      "valid_entries": 480,
+      "expired_entries": 20
+    },
+    "keys_detail": [
+      {
+        "key": "12345678...abcd",
+        "owner": "admin",
+        "requests_today": 42,
+        "total_requests": 1250,
+        "is_valid": true
+      }
+    ]
+  }
+}</pre>
+
+                        <h4 class="mt-4">使用示例</h4>
+                        <div class="code-block">
+                            <code>curl "https://api.example.com/stats.php"</code>
+                        </div>
+                    </div>
+
+                    <!-- 错误代码 -->
+                    <div class="endpoint">
+                        <h3><i class="fas fa-exclamation-triangle"></i> 错误代码</h3>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>HTTP 状态码</th>
+                                    <th>说明</th>
+                                    <th>可能原因</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>200</strong></td>
+                                    <td>成功</td>
+                                    <td>请求成功处理</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>400</strong></td>
+                                    <td>请求错误</td>
+                                    <td>缺少必需参数或参数格式错误</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>401</strong></td>
+                                    <td>未授权</td>
+                                    <td>访问管理功能需要认证</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>404</strong></td>
+                                    <td>未找到</td>
+                                    <td>玩家不存在或端点不存在</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>429</strong></td>
+                                    <td>请求过多</td>
+                                    <td>触发速率限制</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>500</strong></td>
+                                    <td>服务器错误</td>
+                                    <td>内部错误，请联系管理员</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 管理功能 -->
+                <section id="admin" class="mt-5">
+                    <h2 class="mb-4"><i class="fas fa-user-shield"></i> 管理功能</h2>
+                    <div class="alert-custom alert-warning-custom">
+                        <strong><i class="fas fa-lock"></i> 认证要求：</strong> 所有管理接口都需要 HTTP Basic 认证，使用 <code>config.php</code> 中配置的管理员账户。
+                    </div>
+
+                    <!-- 初始化脚本 -->
+                    <div id="admin-setup" class="endpoint">
+                        <h3>
+                            <span class="method get">GET</span>
+                            初始化脚本
+                            <span class="badge-auth"><i class="fas fa-lock"></i> 需要认证</span>
+                        </h3>
+                        <p>用于首次部署或重新初始化系统。检查系统要求、创建数据库表、验证配置。</p>
+                        
+                        <h4 class="mt-4">请求 URL</h4>
+                        <div class="code-block">
+                            <code>GET /setup.php</code>
+                        </div>
+
+                        <h4 class="mt-4">功能说明</h4>
+                        <ul>
+                            <li>✅ 检查 PHP 版本和必需扩展</li>
+                            <li>✅ 检查数据库表是否存在</li>
+                            <li>✅ 自动创建缺失的表</li>
+                            <li>✅ 检查 API 密钥数量</li>
+                            <li>✅ 验证配置文件</li>
+                        </ul>
+
+                        <h4 class="mt-4">响应示例</h4>
+                        <pre class="response-example">{
+  "success": true,
+  "setup_time": "2025-11-25 10:30:00",
+  "steps": [
+    {
+      "step": "system_check",
+      "status": "success",
+      "message": "System requirements checked"
+    },
+    {
+      "step": "table_check",
+      "status": "success",
+      "message": "All tables exist"
+    },
+    {
+      "step": "api_keys_check",
+      "status": "success",
+      "message": "Found 3 valid API keys"
+    }
+  ],
+  "message": "✅ Setup completed successfully!",
+  "next_steps": [
+    "1. Add Hypixel API keys via /hypixel-keys.php",
+    "2. Test the API via /index.php?uuid=player_uuid",
+    "3. Monitor statistics via /stats.php"
+  ]
+}</pre>
+
+                        <h4 class="mt-4">使用示例</h4>
+                        <div class="code-block">
+                            <code>curl -u admin:password "https://api.example.com/setup.php"</code>
+                        </div>
+                    </div>
+
+                    <!-- 密钥管理 -->
+                    <div id="admin-keys" class="endpoint">
+                        <h3>
+                            <span class="method get">GET</span>
+                            <span class="method post">POST</span>
+                            密钥管理
+                            <span class="badge-auth"><i class="fas fa-lock"></i> 需要认证</span>
+                        </h3>
+                        <p>管理 Hypixel API 密钥。查看、添加密钥及其使用统计。</p>
+                        
+                        <h4 class="mt-4">1️⃣ 查看所有密钥</h4>
+                        <div class="code-block">
+                            <code>GET /hypixel-keys.php</code>
+                        </div>
+                        <p class="mt-2">返回所有 API 密钥的列表及其统计信息。</p>
+
+                        <h5 class="mt-3">响应示例：</h5>
+                        <pre class="response-example">{
+  "success": true,
+  "data": [
+    {
+      "key": "12345678-1234-1234-1234-123456789abc",
+      "created_at": "2025-11-25 10:00:00",
+      "last_checked": "2025-11-25 12:30:00",
+      "last_used": "2025-11-25 12:35:00",
+      "daily_requests": 125,
+      "total_requests": 5430,
+      "is_valid": true,
+      "status_code": 200,
+      "owner": "admin",
+      "notes": "主密钥"
+    }
+  ]
+}</pre>
+
+                        <h5 class="mt-3">使用示例：</h5>
+                        <div class="code-block">
+                            <code>curl -u admin:password "https://api.example.com/hypixel-keys.php"</code>
+                        </div>
+
+                        <h4 class="mt-5">2️⃣ 添加新密钥（方式一：GET）</h4>
+                        <div class="code-block">
+                            <code>GET /hypixel-keys.php?add_key={your_hypixel_api_key}</code>
+                        </div>
+
+                        <h5 class="mt-3">使用示例：</h5>
+                        <div class="code-block">
+                            <code>curl -u admin:password "https://api.example.com/hypixel-keys.php?add_key=12345678-1234-1234-1234-123456789abc"</code>
+                        </div>
+
+                        <h5 class="mt-3">成功响应：</h5>
+                        <pre class="response-example">{
+  "success": true,
+  "message": "Hypixel API key added successfully"
+}</pre>
+
+                        <h4 class="mt-5">3️⃣ 添加新密钥（方式二：POST）</h4>
+                        <div class="code-block">
+                            <code>POST /hypixel-keys.php<br>
+Content-Type: application/json<br>
+<br>
+{<br>
+  "hypixel_key": "your_hypixel_api_key"<br>
+}</code>
+                        </div>
+
+                        <h5 class="mt-3">使用示例：</h5>
+                        <div class="code-block">
+                            <code>curl -u admin:password -X POST \<br>
+  -H "Content-Type: application/json" \<br>
+  -d '{"hypixel_key":"12345678-1234-1234-1234-123456789abc"}' \<br>
+  "https://api.example.com/hypixel-keys.php"</code>
+                        </div>
+
+                        <h4 class="mt-5">📋 密钥信息字段说明</h4>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>字段</th>
+                                    <th>类型</th>
+                                    <th>说明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>key</code></td>
+                                    <td>string</td>
+                                    <td>API 密钥（完整显示）</td>
+                                </tr>
+                                <tr>
+                                    <td><code>owner</code></td>
+                                    <td>string</td>
+                                    <td>密钥所有者/备注（可选）</td>
+                                </tr>
+                                <tr>
+                                    <td><code>notes</code></td>
+                                    <td>string</td>
+                                    <td>备注信息（可选）</td>
+                                </tr>
+                                <tr>
+                                    <td><code>is_valid</code></td>
+                                    <td>boolean</td>
+                                    <td>密钥是否有效</td>
+                                </tr>
+                                <tr>
+                                    <td><code>daily_requests</code></td>
+                                    <td>integer</td>
+                                    <td>今日请求数</td>
+                                </tr>
+                                <tr>
+                                    <td><code>total_requests</code></td>
+                                    <td>integer</td>
+                                    <td>总请求数</td>
+                                </tr>
+                                <tr>
+                                    <td><code>last_used</code></td>
+                                    <td>datetime</td>
+                                    <td>最后使用时间</td>
+                                </tr>
+                                <tr>
+                                    <td><code>status_code</code></td>
+                                    <td>integer</td>
+                                    <td>最后请求的 HTTP 状态码</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4 class="mt-4">❌ 错误响应</h4>
+                        <pre class="response-example">{
+  "success": false,
+  "error": "Invalid Hypixel API key"
+}</pre>
+
+                        <div class="alert-custom alert-info-custom mt-3">
+                            <strong><i class="fas fa-info-circle"></i> 重要提示：</strong>
+                            <ul class="mb-0">
+                                <li>添加密钥时系统会自动验证其有效性</li>
+                                <li>只有通过验证的密钥才会被添加到数据库</li>
+                                <li>无效的密钥在使用时会被自动删除</li>
+                                <li>可以在 <a href="https://developer.hypixel.net/" target="_blank" class="text-primary">Hypixel 开发者面板</a> 获取 API 密钥</li>
+                            </ul>
+                        </div>
+
+                        <div class="alert-custom alert-warning-custom mt-3">
+                            <strong><i class="fas fa-exclamation-triangle"></i> 注意：</strong> 目前不支持通过 API 删除密钥。无效的密钥会在使用时自动从数据库中删除。如需手动删除，请直接操作数据库。
+                        </div>
+                    </div>
+
+                    <!-- 缓存管理 -->
+                    <div id="admin-cache" class="endpoint">
+                        <h3>
+                            <span class="method get">GET</span>
+                            缓存管理
+                            <span class="badge-auth"><i class="fas fa-lock"></i> 需要认证</span>
+                        </h3>
+                        <p>查看缓存统计信息和手动清理缓存。</p>
+                        
+                        <h4 class="mt-4">缓存统计</h4>
+                        <div class="code-block">
+                            <code>GET /cache-stats.php</code>
+                        </div>
+                        <p class="mt-2">显示详细的缓存统计信息，包括总条目数、有效条目、过期条目、重复条目等。</p>
+
+                        <h4 class="mt-4">快速清理</h4>
+                        <div class="code-block">
+                            <code># 标准清理<br>
+GET /cleanup.php<br><br>
+# 强制清理（更激进）<br>
+GET /cleanup.php?force=1</code>
+                        </div>
+
+                        <h4 class="mt-4">响应示例</h4>
+                        <pre class="response-example">{
+  "success": true,
+  "cleanup_type": "force",
+  "cleanup_time": "2025-11-25 10:30:00",
+  "before_cleanup": {
+    "total_entries": 500,
+    "valid_entries": 450,
+    "expired_entries": 50
+  },
+  "cleanup_result": {
+    "expired_removed": 50,
+    "duplicates_removed": 5,
+    "total_cleaned": 55
+  },
+  "after_cleanup": {
+    "total_entries": 445,
+    "valid_entries": 445,
+    "expired_entries": 0
+  },
+  "summary": {
+    "space_saved": 55
+  }
+}</pre>
+
+                        <h4 class="mt-4">使用示例</h4>
+                        <div class="code-block">
+                            <code># 标准清理<br>
+curl -u admin:password "https://api.example.com/cleanup.php"<br><br>
+# 强制清理<br>
+curl -u admin:password "https://api.example.com/cleanup.php?force=1"</code>
+                        </div>
+                    </div>
+
+                    <!-- 维护工具 -->
+                    <div id="admin-maintenance" class="endpoint">
+                        <h3>
+                            <span class="method get">GET</span>
+                            维护工具
+                            <span class="badge-auth"><i class="fas fa-lock"></i> 需要认证</span>
+                        </h3>
+                        <p>全功能缓存维护工具，支持多种维护操作。</p>
+                        
+                        <h4 class="mt-4">请求 URL</h4>
+                        <div class="code-block">
+                            <code>GET /maintenance.php?action={action}</code>
+                        </div>
+
+                        <h4 class="mt-4">支持的操作</h4>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>操作</th>
+                                    <th>说明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>status</code></td>
+                                    <td>查看缓存状态和重复项统计</td>
+                                </tr>
+                                <tr>
+                                    <td><code>cleanup</code></td>
+                                    <td>标准清理（删除过期和重复）</td>
+                                </tr>
+                                <tr>
+                                    <td><code>force_cleanup</code></td>
+                                    <td>强制清理（更激进）</td>
+                                </tr>
+                                <tr>
+                                    <td><code>remove_duplicates</code></td>
+                                    <td>仅删除重复条目</td>
+                                </tr>
+                                <tr>
+                                    <td><code>full_maintenance</code></td>
+                                    <td>完整维护（删除重复 + 强制清理）</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4 class="mt-4">使用示例</h4>
+                        <div class="code-block">
+                            <code># 查看状态<br>
+curl -u admin:password "https://api.example.com/maintenance.php?action=status"<br><br>
+# 标准清理<br>
+curl -u admin:password "https://api.example.com/maintenance.php?action=cleanup"<br><br>
+# 完整维护<br>
+curl -u admin:password "https://api.example.com/maintenance.php?action=full_maintenance"</code>
+                        </div>
+
+                        <h4 class="mt-4">状态响应示例</h4>
+                        <pre class="response-example">{
+  "success": true,
+  "action": "status",
+  "timestamp": "2025-11-25 10:30:00",
+  "data": {
+    "cache_stats": {
+      "total_entries": 500,
+      "valid_entries": 480,
+      "expired_entries": 20,
+      "duplicate_entries": 3
+    },
+    "duplicates": {
+      "uuid_duplicates": 2,
+      "name_duplicates": 1
+    },
+    "total_issues": 23
+  }
+}</pre>
+                    </div>
+                </section>
+
+                <!-- 缓存策略 -->
+                <section id="cache-policy" class="mt-5">
+                    <h2 class="mb-4"><i class="fas fa-database"></i> 缓存策略</h2>
+                    <div class="endpoint">
+                        <h3>工作原理</h3>
+                        <p>本系统采用智能的即时缓存过期检测机制：</p>
+                        
+                        <h4 class="mt-4">🔄 缓存流程</h4>
+                        <ol>
+                            <li><strong>用户请求</strong> → 系统首先查询缓存</li>
+                            <li><strong>检查有效性</strong> → 如果缓存存在，检查是否过期
+                                <ul>
+                                    <li>✅ 有效：直接返回缓存数据</li>
+                                    <li>❌ 过期：立即删除该条记录，从官方 API 获取新数据</li>
+                                </ul>
+                            </li>
+                            <li><strong>缓存新数据</strong> → 将新获取的数据缓存 3 小时</li>
+                            <li><strong>返回数据</strong> → 用户获得最新数据（完全透明）</li>
+                        </ol>
+
+                        <h4 class="mt-4">⏱️ 时间设置</h4>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>参数</th>
+                                    <th>值</th>
+                                    <th>说明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>缓存时长</strong></td>
+                                    <td>3 小时 (10800 秒)</td>
+                                    <td>可在 config.php 中修改</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>过期检测</strong></td>
+                                    <td>每次请求</td>
+                                    <td>访问时即时检测</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>批量清理</strong></td>
+                                    <td>1/100 概率</td>
+                                    <td>>50 条过期时触发</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4 class="mt-4">🛡️ 防止重复</h4>
+                        <ul>
+                            <li>插入新缓存前自动删除旧缓存</li>
+                            <li>定期检查并清理重复条目</li>
+                            <li>维护工具提供手动清理重复功能</li>
+                        </ul>
+
+                        <h4 class="mt-4">📊 性能优化</h4>
+                        <ul>
+                            <li>即时清理：单条过期记录立即删除，无需批量扫描</li>
+                            <li>批量备份：后台定期清理大量过期数据</li>
+                            <li>索引优化：UUID、名称、过期时间都有索引</li>
+                            <li>命中率统计：完整的缓存命中率跟踪</li>
+                        </ul>
+
+                        <div class="alert-custom alert-info-custom mt-3">
+                            <strong><i class="fas fa-lightbulb"></i> 最佳实践：</strong>
+                            <ul class="mb-0">
+                                <li>优先使用 UUID 查询（更稳定，玩家可能改名）</li>
+                                <li>缓存命中时响应极快（< 10ms）</li>
+                                <li>缓存未命中时从官方 API 获取（200-500ms）</li>
+                                <li>过期刷新对用户完全透明</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 使用示例 -->
+                <section id="examples" class="mt-5">
+                    <h2 class="mb-4"><i class="fas fa-code"></i> 使用示例</h2>
+
+                    <!-- JavaScript 示例 -->
+                    <div class="endpoint">
+                        <h3><i class="fab fa-js"></i> JavaScript / Fetch API</h3>
+                        <div class="code-block">
+                            <code>// 获取玩家数据<br>
+async function getPlayerData(uuid) {<br>
+  try {<br>
+    const response = await fetch(`https://api.example.com/index.php?uuid=${uuid}`);<br>
+    const data = await response.json();<br>
+    <br>
+    if (data.success) {<br>
+      console.log('Player:', data.data.player.displayname);<br>
+      console.log('Stats:', data.data.player.stats);<br>
+      return data.data;<br>
+    } else {<br>
+      console.error('Error:', data.error);<br>
+    }<br>
+  } catch (error) {<br>
+    console.error('Request failed:', error);<br>
+  }<br>
+}<br>
+<br>
+// 使用<br>
+getPlayerData('f7c77d999f154a66a87dc4a51ef30d19');</code>
+                        </div>
+                    </div>
+
+                    <!-- Python 示例 -->
+                    <div class="endpoint">
+                        <h3><i class="fab fa-python"></i> Python / requests</h3>
+                        <div class="code-block">
+                            <code>import requests<br>
+<br>
+def get_player_data(uuid):<br>
+    url = f"https://api.example.com/index.php?uuid={uuid}"<br>
+    <br>
+    try:<br>
+        response = requests.get(url)<br>
+        data = response.json()<br>
+        <br>
+        if data['success']:<br>
+            player = data['data']['player']<br>
+            print(f"Player: {player['displayname']}")<br>
+            print(f"Network Level: {player.get('networkExp', 0)}")<br>
+            return data['data']<br>
+        else:<br>
+            print(f"Error: {data['error']}")<br>
+    except Exception as e:<br>
+        print(f"Request failed: {e}")<br>
+<br>
+# 使用<br>
+get_player_data('f7c77d999f154a66a87dc4a51ef30d19')</code>
+                        </div>
+                    </div>
+
+                    <!-- PHP 示例 -->
+                    <div class="endpoint">
+                        <h3><i class="fab fa-php"></i> PHP / cURL</h3>
+                        <div class="code-block">
+                            <code>&lt;?php<br>
+function getPlayerData($uuid) {<br>
+    $url = "https://api.example.com/index.php?uuid=" . urlencode($uuid);<br>
+    <br>
+    $ch = curl_init();<br>
+    curl_setopt($ch, CURLOPT_URL, $url);<br>
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);<br>
+    <br>
+    $response = curl_exec($ch);<br>
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);<br>
+    curl_close($ch);<br>
+    <br>
+    if ($httpCode === 200) {<br>
+        $data = json_decode($response, true);<br>
+        if ($data['success']) {<br>
+            return $data['data'];<br>
+        }<br>
+    }<br>
+    <br>
+    return null;<br>
+}<br>
+<br>
+// 使用<br>
+$playerData = getPlayerData('f7c77d999f154a66a87dc4a51ef30d19');<br>
+if ($playerData) {<br>
+    echo $playerData['player']['displayname'];<br>
+}<br>
+?&gt;</code>
+                        </div>
+                    </div>
+
+                    <!-- Bash 示例 -->
+                    <div class="endpoint">
+                        <h3><i class="fas fa-terminal"></i> Bash / curl</h3>
+                        <div class="code-block">
+                            <code>#!/bin/bash<br>
+<br>
+# 获取玩家数据<br>
+UUID="f7c77d999f154a66a87dc4a51ef30d19"<br>
+curl "https://api.example.com/index.php?uuid=$UUID" | jq .<br>
+<br>
+# 管理员清理缓存<br>
+curl -u admin:password "https://api.example.com/cleanup.php?force=1" | jq .<br>
+<br>
+# 查看统计<br>
+curl "https://api.example.com/stats.php" | jq '.data.today_stats'</code>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 故障排除 -->
+                <section id="troubleshooting" class="mt-5">
+                    <h2 class="mb-4"><i class="fas fa-wrench"></i> 故障排除</h2>
+
+                    <div class="endpoint">
+                        <h3>❌ 常见问题</h3>
+
+                        <h4 class="mt-4">1. "No valid Hypixel API keys available"</h4>
+                        <p><strong>原因：</strong>没有可用的有效 API 密钥</p>
+                        <p><strong>解决方案：</strong></p>
+                        <ul>
+                            <li>访问 <code>/hypixel-keys.php</code> 添加新的 API 密钥</li>
+                            <li>检查现有密钥是否有效</li>
+                            <li>确保密钥来自 <a href="https://developer.hypixel.net/" target="_blank">Hypixel 开发者面板</a></li>
+                        </ul>
+
+                        <h4 class="mt-4">2. "Connection failed: ..."</h4>
+                        <p><strong>原因：</strong>数据库连接失败</p>
+                        <p><strong>解决方案：</strong></p>
+                        <ul>
+                            <li>检查 <code>config.php</code> 中的数据库配置</li>
+                            <li>确认 MySQL 服务正在运行</li>
+                            <li>验证数据库用户权限</li>
+                            <li>测试数据库连接：<code>mysql -u username -p database</code></li>
+                        </ul>
+
+                        <h4 class="mt-4">3. "Class 'XXX' not found"</h4>
+                        <p><strong>原因：</strong>PHP 类加载错误</p>
+                        <p><strong>解决方案：</strong></p>
+                        <ul>
+                            <li>检查文件权限：<code>chmod -R 755 /path/to/hypixelmirro</code></li>
+                            <li>确认所有源文件都存在于 <code>src/</code> 目录</li>
+                            <li>检查 PHP include_path 配置</li>
+                        </ul>
+
+                        <h4 class="mt-4">4. 缓存未清理</h4>
+                        <p><strong>原因：</strong>过期数据未被删除</p>
+                        <p><strong>解决方案：</strong></p>
+                        <ul>
+                            <li>手动强制清理：<code>/cleanup.php?force=1</code></li>
+                            <li>使用维护工具：<code>/maintenance.php?action=full_maintenance</code></li>
+                            <li>检查服务器时区设置是否正确</li>
+                        </ul>
+
+                        <h4 class="mt-4">5. 401 Unauthorized</h4>
+                        <p><strong>原因：</strong>访问管理功能需要认证</p>
+                        <p><strong>解决方案：</strong></p>
+                        <ul>
+                            <li>确认使用了正确的管理员账户</li>
+                            <li>检查 <code>config.php</code> 中的 admin 配置</li>
+                            <li>使用 <code>curl -u username:password</code> 格式</li>
+                        </ul>
+                    </div>
+
+                    <div class="endpoint">
+                        <h3>🔍 调试技巧</h3>
+                        <h4 class="mt-4">查看 PHP 错误日志</h4>
+                        <div class="code-block">
+                            <code># Ubuntu/Debian<br>
+tail -f /var/log/php7.4-fpm.log<br>
+<br>
+# 或 Nginx 错误日志<br>
+tail -f /var/log/nginx/error.log</code>
+                        </div>
+
+                        <h4 class="mt-4">测试数据库连接</h4>
+                        <div class="code-block">
+                            <code>mysql -u your_username -p api -e "SELECT COUNT(*) FROM player_cache;"</code>
+                        </div>
+
+                        <h4 class="mt-4">检查 PHP 扩展</h4>
+                        <div class="code-block">
+                            <code>php -m | grep -E "pdo|curl|json"</code>
+                        </div>
+
+                        <h4 class="mt-4">测试类加载</h4>
+                        <div class="code-block">
+                            <code>curl "https://api.example.com/test.php"</code>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <h3>📧 获取帮助</h3>
+                        <p>如果以上方法无法解决您的问题：</p>
+                        <ul>
+                            <li>📝 在 GitHub 提交 Issue（包含错误日志）</li>
+                            <li>💬 加入社区讨论</li>
+                            <li>📧 联系技术支持</li>
+                        </ul>
+                        <div class="alert-custom alert-info-custom">
+                            <strong><i class="fas fa-info-circle"></i> 提示：</strong> 提交问题时，请包含：PHP 版本、MySQL 版本、错误日志、复现步骤。
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5><i class="fas fa-server"></i> Hypixel Mirror API</h5>
+                    <p>快速、可靠的 Hypixel 数据镜像服务</p>
+                </div>
+                <div class="col-md-4">
+                    <h5><i class="fas fa-link"></i> 快速链接</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#overview" class="text-white-50">项目概述</a></li>
+                        <li><a href="#setup" class="text-white-50">搭建教程</a></li>
+                        <li><a href="#api" class="text-white-50">API 文档</a></li>
+                        <li><a href="/stats.php" class="text-white-50" target="_blank">统计面板</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5><i class="fas fa-info-circle"></i> 关于</h5>
+                    <p>本项目基于 MIT 许可证开源</p>
+                    <p>&copy; 2025 Hypixel Mirror API</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    
+                    // 更新侧边栏激活状态
+                    document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // 滚动时更新侧边栏激活状态
+        window.addEventListener('scroll', () => {
+            let current = '';
+            document.querySelectorAll('section[id]').forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

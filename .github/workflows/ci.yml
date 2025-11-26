@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.4'
+        extensions: pdo, pdo_mysql, curl, json
+        
+    - name: Check PHP syntax
+      run: |
+        find . -name "*.php" -not -path "./vendor/*" -exec php -l {} \;
+        
+    - name: Validate config example
+      run: |
+        php -r "require 'config.example.php';"
+

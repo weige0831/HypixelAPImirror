@@ -56,7 +56,7 @@ https://weige0831.github.io/HypixelAPImirror/
 
 ### 🌐 您的演示站点
 ```
-https://api.everlastingness.net/Hypixelmirror/public/docs.html
+https://api.everlastingness.net/Hypixelmirror/public/
 ```
 - ✅ 展示完整的运行环境
 - ✅ 可以测试 API 功能
